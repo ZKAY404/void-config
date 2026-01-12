@@ -38,6 +38,8 @@ if not isfolder(NONNY_SETTINGS) then makefolder(NONNY_SETTINGS) end
 -- AUTO LOAD (Player → Nonny)
 -- ===============================
 local function LoadSettingsFromUserFolder()
+    print("[AUTO-LOAD] Forcing sync...")
+
     for _, filename in ipairs(FILES) do
         local sourcePath = USER_FOLDER .. "/" .. filename
         local targetPath = NONNY_SETTINGS .. "/" .. filename
@@ -46,12 +48,13 @@ local function LoadSettingsFromUserFolder()
             writefile(targetPath, readfile(sourcePath))
             print("[AUTO-LOADED]", filename)
         else
-            if not isfile(targetPath) then
-                writefile(targetPath, "")
-                print("[CREATED BLANK]", filename)
-            end
+            -- FORCE BLANK OVERWRITE
+            writefile(targetPath, "")
+            print("[FORCED BLANK]", filename)
         end
     end
+
+    print("[AUTO-LOAD] Complete")
 end
 
 LoadSettingsFromUserFolder() -- 🔥 AUTO LOAD FIRST
